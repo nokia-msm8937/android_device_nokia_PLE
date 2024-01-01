@@ -53,19 +53,10 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.midi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.midi.xml \
     frameworks/native/data/etc/android.software.print.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.print.xml
 
-ifneq ($(TARGET_HAS_NO_CONSUMERIR),true)
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.consumerir.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.consumerir.xml
-endif
-
 # ANT
 PRODUCT_PACKAGES += \
     AntHalService \
     com.dsi.ant.antradio_library
-
-# Device-specific Settings
-PRODUCT_PACKAGES += \
-    XiaomiParts
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -97,6 +88,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(LOCAL_PATH)/audio/audio_output_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_output_policy.conf \
+    $(LOCAL_PATH)/audio/audio_platform_info.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_platform_info.xml \
     $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
     $(LOCAL_PATH)/audio/audio_tuning_mixer.txt:$(TARGET_COPY_OUT_VENDOR)/etc/audio_tuning_mixer.txt \
     $(LOCAL_PATH)/audio/sound_trigger_mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sound_trigger_mixer_paths.xml \
@@ -128,13 +120,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     Snap
-
-# Consumer IR
-ifneq ($(TARGET_HAS_NO_CONSUMERIR),true)
-PRODUCT_PACKAGES += \
-    android.hardware.ir@1.0-impl \
-    android.hardware.ir@1.0-service
-endif
 
 # Display
 PRODUCT_PACKAGES += \
@@ -174,12 +159,10 @@ PRODUCT_PACKAGES += \
     FMRadio \
     libfmjni
 
-# Gatekeeper HAL
-ifneq ($(TARGET_USES_DEVICE_SPECIFIC_GATEKEEPER),true)
+# Gatekeeper
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0-impl \
     android.hardware.gatekeeper@1.0-service
-endif
 
 # GPS / Location
 PRODUCT_PACKAGES += \
@@ -238,15 +221,13 @@ PRODUCT_PACKAGES += \
     IPACM_cfg.xml
 
 # Keymaster HAL
-ifneq ($(TARGET_USES_DEVICE_SPECIFIC_KEYMASTER),true)
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-impl \
     android.hardware.keymaster@3.0-service
-endif
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.lights-service.xiaomi_msm8937
+    android.hardware.lights-service.PLE
 
 # LiveDisplay
 PRODUCT_PACKAGES += \
@@ -254,6 +235,7 @@ PRODUCT_PACKAGES += \
 
 # Media
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/media/mixer_paths_mtp.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_mtp.xml \
     $(LOCAL_PATH)/media/media_codecs_8937_v1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_8937_v1.xml \
     $(LOCAL_PATH)/media/media_codecs_8956.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_8956.xml \
     $(LOCAL_PATH)/media/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml \
@@ -336,6 +318,9 @@ PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-service \
     libsensorndkbridge
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/sensors/sensor_def_qcomdev.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/sensor_def_qcomdev.conf
+
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
@@ -412,4 +397,4 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini
 
 # Inherit the proprietary files
-$(call inherit-product, vendor/xiaomi/msm8937-common/msm8937-common-vendor.mk)
+$(call inherit-product, vendor/nokia/PLE/PLE-vendor.mk)

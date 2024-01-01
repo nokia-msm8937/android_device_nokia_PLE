@@ -8,6 +8,9 @@
 
 set -e
 
+DEVICE=PLE
+VENDOR=nokia
+
 # Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi
@@ -21,46 +24,14 @@ if [ ! -f "${HELPER}" ]; then
 fi
 source "${HELPER}"
 
-# Initialize the helper for common
-setup_vendor "${DEVICE_COMMON}" "${VENDOR}" "${ANDROID_ROOT}" true
+# Initialize the helper
+setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" true
 
 # Warning headers and guards
-write_headers "land riva rolex santoni tiare ulysse"
+write_headers
 
-# The standard common blobs
 write_makefiles "${MY_DIR}/proprietary-files.txt" true
 
 # Finish
 write_footers
 
-if [ -s "${MY_DIR}/../${DEVICE}/proprietary-files.txt" ]; then
-    # Reinitialize the helper for device
-    setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" false
-
-    # Warning headers and guards
-    write_headers
-
-    # The standard device blobs
-    write_makefiles "${MY_DIR}/../${DEVICE}/proprietary-files.txt" true
-
-    # Finish
-    write_footers
-fi
-
-if [ -s "${MY_DIR}/../${DEVICE_SPECIFIED_COMMON}/proprietary-files.txt" ]; then
-    # Workaround: Define $DEVICE
-    export DEVICE="${DEVICE_SPECIFIED_COMMON}"
-    export DEVICE_COMMON="${DEVICE_SPECIFIED_COMMON}"
-
-    # Reinitialize the helper for device specified common
-    setup_vendor "${DEVICE_SPECIFIED_COMMON}" "${VENDOR}" "${ANDROID_ROOT}" true
-
-    # Warning headers and guards
-    write_headers "$DEVICE_SPECIFIED_COMMON_DEVICE"
-
-    # The standard device blobs
-    write_makefiles "${MY_DIR}/../${DEVICE_SPECIFIED_COMMON}/proprietary-files.txt" true
-
-    # Finish
-    write_footers
-fi

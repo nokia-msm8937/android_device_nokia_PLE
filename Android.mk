@@ -6,7 +6,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifneq ($(filter land riva rolex santoni tiare ulysse,$(TARGET_DEVICE)),)
+ifeq ($(TARGET_DEVICE),PLE)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
